@@ -1,8 +1,6 @@
 const express = require('express');
 const routes = require('./app/routes/index')
 
-const { Field } = require('./app/models');
-
 const app = express();
 
 app.use(express.json());

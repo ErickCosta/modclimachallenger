@@ -1,9 +1,17 @@
+const { Farm, Field } = require('../models');
+
 module.exports = {
 
     async index(req, res){
         console.log('[CONTROLLER] farm (index)');
 
-        return res.json({'message': 'GET farm OK'});
+        const result = await Farm.findAll({
+            include: {
+                model: Field
+            }
+        });
+
+        return res.json(result);
     },
 
     async show(req, res){

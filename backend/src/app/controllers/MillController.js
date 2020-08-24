@@ -1,32 +1,74 @@
+const { Mill, Havest, Farm, Field } = require('../models');
+
 module.exports = {
 
     async index(req, res){
         console.log('[CONTROLLER] mill (index)');
 
-        return res.json({'message': 'GET mill OK'});
+        const result = await Mill.findAll({
+            include: {
+                model: Havest,
+                include: {
+                    model: Farm,
+                    include: {
+                        model: Field
+                    }
+                }
+            }
+        });
+
+        return res.json(result);
     },
 
     async show(req, res){
         console.log('[CONTROLLER] mill (show)');
 
-        return res.json({'message': 'GET by ID mill OK'});
+        const result = await Mill.findByPk(req.params.id);
+
+        if (!result){
+            return res.json({"warning": "Mill was not found."});
+        }
+
+        return res.json(result);
     },
 
     async store(req, res){
         console.log('[CONTROLLER] mill (store)');
 
-        return res.json({'message': 'POST mill OK'});
+        const result = await Mill.create({
+            name: req.body.name});
+   
+        return res.json(result);
     },
 
     async update(req, res){
         console.log('[CONTROLLER] mill (update)');
 
-        return res.json({'message': 'PUT by ID mill OK'});
+        const mill = await Mill.findByPk(req.params.id);
+
+        if (!mill){
+            return res.json({"warning": "Mill was not found."});
+        }
+
+        const result = await mill.update({
+            name: req.body.name});
+
+        return res.json(result);
     },
 
     async destroy(req, res){
         console.log('[CONTROLLER] mill (destroy)');
 
-        return res.json({'message': 'DELETE by ID mill OK'});
+        const mill = await Mill.findByPk(req.params.id);
+
+        if (!mill){
+            return res.json({"warning": "Mill was not found."});
+        }
+
+        const result = await mill.destroy({
+            where: {id: req.params.id}
+        });
+        
+        return res.json({"sucess": "Mill was removed."});
     }
 }

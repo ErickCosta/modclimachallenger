@@ -1,32 +1,72 @@
+const { Field } = require('../models');
+
 module.exports = {
 
     async index(req, res){
         console.log('[CONTROLLER] field (index)');
 
-        return res.json({'message': 'GET field OK'});
+        const result = await Field.findAll();
+
+        return res.json(result);
     },
 
     async show(req, res){
         console.log('[CONTROLLER] field (show)');
 
-        return res.json({'message': 'GET by ID field OK'});
+        const result = await Field.findByPk(req.params.id);
+
+        if (!result){
+            return res.json({"warning": "Field was not found."});
+        }
+
+        return res.json(result);
     },
 
     async store(req, res){
         console.log('[CONTROLLER] field (store)');
 
-        return res.json({'message': 'POST field OK'});
+        const result = await Field.create({
+            code: req.body.code, 
+            coordinates: {
+                type: 'Point', 
+                coordinates: [req.body.latitude, req.body.longitude]}
+            });
+   
+        return res.json(result);
     },
 
     async update(req, res){
         console.log('[CONTROLLER] field (update)');
 
-        return res.json({'message': 'PUT by ID field OK'});
+        const field = await Field.findByPk(req.params.id);
+
+        if (!field){
+            return res.json({"warning": "Field was not found."});
+        }
+
+        const result = await field.update({
+            code: req.body.code, 
+            coordinates: {
+                type: 'Point', 
+                coordinates: [req.body.latitude, req.body.longitude]}
+            });
+
+        return res.json(result);
     },
 
     async destroy(req, res){
         console.log('[CONTROLLER] field (destroy)');
+
+        const field = await Field.findByPk(req.params.id);
+
+        if (!field){
+            return res.json({"warning": "Field was not found."});
+        }
+
+        const result = await field.destroy({
+            where: {id: req.params.id}
+        });
         
-        return res.json({'message': 'DELETE by ID field OK'});
+        return res.json({"sucess": "Field was removed."});
     }
 }

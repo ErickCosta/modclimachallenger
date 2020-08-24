@@ -1,8 +1,23 @@
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('Field', {
+  
+    const Field = sequelize.define('Field', {
       code: DataTypes.STRING,
-      coordinates: DataTypes.GEOMETRY
+      coordinates: DataTypes.GEOMETRY,
+      farmId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'Farm',
+          key: 'id'
+        }
+      }
+    },
+    {
+      tableName: 'Field'
     });
   
-    return User;
+    Field.associate = function(models) {
+      Field.belongsTo(models.Farm, {foreignKey: 'farmId', sourceKey: 'id'});
+    }
+  
+    return Field;
   }
