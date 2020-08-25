@@ -1,4 +1,4 @@
-const { Field } = require('../models');
+const { Farm, Field } = require('../models');
 
 module.exports = {
 
@@ -25,6 +25,18 @@ module.exports = {
     async store(req, res){
         console.log('[CONTROLLER] field (store)');
 
+        const { farmId } = req.body;
+
+        const farmCount = await Farm.count({
+            where: {id: farmId}
+        });
+
+        console.log(farmCount);
+
+        if (farmCount == 0){
+            res.json({"warning": "Farm ID dos not exixts."});
+        }
+
         const result = await Field.create({
             code: req.body.code, 
             coordinates: {
@@ -39,6 +51,16 @@ module.exports = {
 
     async update(req, res){
         console.log('[CONTROLLER] field (update)');
+
+        const { farmId } = req.body;
+
+        const farmCount = await Farm.count({
+            where: {id: farmId}
+        });
+
+        if (farmCount == 0){
+            res.json({"warning": "Farm ID dos not exixts."});
+        }
 
         const field = await Field.findByPk(req.params.id);
 
@@ -67,7 +89,7 @@ module.exports = {
             return res.json({"warning": "Field was not found."});
         }
 
-        const result = await field.destroy({
+        await field.destroy({
             where: {id: req.params.id}
         });
         

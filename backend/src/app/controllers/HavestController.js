@@ -1,4 +1,4 @@
-const { Havest, Farm, Field } = require('../models');
+const { Mill ,Havest, Farm, Field } = require('../models');
 
 module.exports = {
 
@@ -39,6 +39,16 @@ module.exports = {
     async store(req, res){
         console.log('[CONTROLLER] havest (store)');
 
+        const { millId } = req.body;
+
+        const millCount = await Mill.count({
+            where: {id: millId}
+        });
+
+        if (millCount == 0){
+            res.json({"warning": "Mill ID dos not exixts."});
+        }
+
         const result = await Havest.create(req.body);
    
         return res.json(result);
@@ -46,6 +56,16 @@ module.exports = {
 
     async update(req, res){
         console.log('[CONTROLLER] havest (update)');
+
+        const { millId } = req.body;
+
+        const millCount = await Mill.count({
+            where: {id: millId}
+        });
+
+        if (millCount == 0){
+            res.json({"warning": "Mill ID dos not exixts."});
+        }
 
         const havest = await Havest.findByPk(req.params.id);
 
@@ -61,13 +81,13 @@ module.exports = {
     async destroy(req, res){
         console.log('[CONTROLLER] havest (destroy)');
 
-        const havest = await Havest.findByPk(req.params.id);
+        const { millId } = await Havest.findByPk(req.params.id);
 
         if (!havest){
-            return res.json({"warning": "Mill was not found."});
+            return res.json({"warning": "Havest was not found."});
         }
 
-        const result = await havest.destroy({
+        await havest.destroy({
             where: {id: req.params.id}
         });
         

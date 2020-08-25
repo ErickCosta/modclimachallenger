@@ -74,7 +74,7 @@ module.exports = {
             return res.json({"warning": "Mill was not found."});
         }
 
-        const result = await mill.destroy({
+        await mill.destroy({
             where: {id: req.params.id}
         });
         
