@@ -17,24 +17,54 @@ module.exports = {
     async show(req, res){
         console.log('[CONTROLLER] farm (show)');
 
-        return res.json({'message': 'GET by ID farm OK'});
+        const result = await Farm.findByPk(req.params.id, {
+            include: {
+                model: Field
+            }
+        });
+
+        if (!result){
+            return res.json({"warning": "Farm was not found."});
+        }
+
+        return res.json(result);
     },
 
     async store(req, res){
         console.log('[CONTROLLER] farm (store)');
  
-        return res.json({'message': 'POST farm OK'});
+        const result = await Farm.create(req.body);
+   
+        return res.json(result);
     },
 
     async update(req, res){
         console.log('[CONTROLLER] farm (update)');
 
-        return res.json({'message': 'PUT by ID farm OK'});
+        const farm = await Farm.findByPk(req.params.id);
+
+        if (!farm){
+            return res.json({"warning": "Farm was not found."});
+        }
+
+        const result = await farm.update(req.body);
+
+        return res.json(result);
     },
 
     async destroy(req, res){
         console.log('[CONTROLLER] farm (destroy)');
 
-        return res.json({'message': 'DELETE by ID farm OK'});
+        const farm = await Farm.findByPk(req.params.id);
+
+        if (!farm){
+            return res.json({"warning": "Mill was not found."});
+        }
+
+        const result = await farm.destroy({
+            where: {id: req.params.id}
+        });
+        
+        return res.json({"sucess": "Farm was removed."});
     }
 }

@@ -2,8 +2,8 @@ module.exports = (sequelize, DataTypes) => {
   
     const Havest = sequelize.define('Havest', {
       code: DataTypes.STRING,
-      startDate: DataTypes.STRING,
-      endDate: DataTypes.STRING,
+      startDate: DataTypes.DATE,
+      endDate: DataTypes.DATE,
       millId: {
         type: DataTypes.INTEGER,
         references: {

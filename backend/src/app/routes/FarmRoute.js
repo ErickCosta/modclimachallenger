@@ -3,7 +3,7 @@ const routes = express.Router();
 
 const farmDataValidationMiddleware = require('../middlewares/FarmDataValidationMiddleware');
 
-const farmController = require('../controllers/FieldController');
+const farmController = require('../controllers/FarmController');
 
 routes.get('/farm', farmDataValidationMiddleware.index, farmController.index);
 routes.get('/farm/:id', farmDataValidationMiddleware.show, farmController.show);

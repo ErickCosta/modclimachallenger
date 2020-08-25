@@ -23,7 +23,17 @@ module.exports = {
     async show(req, res){
         console.log('[CONTROLLER] mill (show)');
 
-        const result = await Mill.findByPk(req.params.id);
+        const result = await Mill.findByPk(req.params.id, {
+            include: {
+                model: Havest,
+                include: {
+                    model: Farm,
+                    include: {
+                        model: Field
+                    }
+                }
+            }   
+        });
 
         if (!result){
             return res.json({"warning": "Mill was not found."});
@@ -35,8 +45,7 @@ module.exports = {
     async store(req, res){
         console.log('[CONTROLLER] mill (store)');
 
-        const result = await Mill.create({
-            name: req.body.name});
+        const result = await Mill.create(req.body);
    
         return res.json(result);
     },

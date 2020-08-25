@@ -29,8 +29,10 @@ module.exports = {
             code: req.body.code, 
             coordinates: {
                 type: 'Point', 
-                coordinates: [req.body.latitude, req.body.longitude]}
-            });
+                coordinates: [req.body.latitude, req.body.longitude]
+            },
+            farmId: req.body.farmId
+        });
    
         return res.json(result);
     },
@@ -48,8 +50,10 @@ module.exports = {
             code: req.body.code, 
             coordinates: {
                 type: 'Point', 
-                coordinates: [req.body.latitude, req.body.longitude]}
-            });
+                coordinates: [req.body.latitude, req.body.longitude]
+            },
+            farmId: req.body.farmId
+        });
 
         return res.json(result);
     },
