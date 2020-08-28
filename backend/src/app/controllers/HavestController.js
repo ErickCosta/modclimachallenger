@@ -1,4 +1,5 @@
 const { Mill, Havest, Farm, Field } = require('../models');
+const socketIo = require('../socket/index');
 
 module.exports = {
 
@@ -52,6 +53,7 @@ module.exports = {
                 res.status(400).json({"warning": "Mill ID does not exists."});
             }else{
                 const result = await Havest.create(req.body);
+                socketIo.update('{message: "New Havest created"}');
                 return res.status(200).json(result);
             }
         } catch (error) {

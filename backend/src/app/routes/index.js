@@ -9,12 +9,12 @@ const farmRoute = require('../routes/FarmRoute');
 const havestRoute = require('../routes/HavestRoute');
 const millRoute = require('../routes/MillRoute')
 
-routes.use(logRequestMiddleware.log);
 
+routes.use(logRequestMiddleware.log);
 routes.use(defaultRoute);
 routes.use(fieldRoute);
 routes.use(farmRoute);
 routes.use(havestRoute);
 routes.use(millRoute);
 
-module.exports = routes
+module.exports = routes;

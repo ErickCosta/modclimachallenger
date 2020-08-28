@@ -1,4 +1,5 @@
 const { Farm, Field } = require('../models');
+const socketIo = require('../socket/index');
 
 module.exports = {
 
@@ -48,6 +49,7 @@ module.exports = {
                     },
                     farmId: req.body.farmId
                 });
+                socketIo.update('{message: "New Field created"}');
                 return res.status(200).json(result);
             }
         } catch (error) {

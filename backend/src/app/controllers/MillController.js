@@ -1,4 +1,5 @@
 const { Mill, Havest, Farm, Field } = require('../models');
+const socketIo = require('../socket/index');
 
 module.exports = {
 
@@ -53,6 +54,7 @@ module.exports = {
         console.log('[CONTROLLER] Mill (store) REQUEST');
         try {
             const result = await Mill.create(req.body);
+            socketIo.update('{message: "New Mill created"}');
             return res.json(result);
         } catch (error) {
             console.log('[CONTROLLER] Mill (store) ERROR', error);

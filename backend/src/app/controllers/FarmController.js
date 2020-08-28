@@ -1,4 +1,5 @@
 const { Havest, Farm, Field } = require('../models');
+const socketIo = require('../socket/index');
 
 module.exports = {
 
@@ -46,6 +47,7 @@ module.exports = {
                 return res.status(400).json({"warning": "Havest ID does not exixts."});
             }else{
                 const result = await Farm.create(req.body);
+                socketIo.update('{message: "New farm created"}');
                 return res.status(200).json(result);
             }
         } catch (error) {
