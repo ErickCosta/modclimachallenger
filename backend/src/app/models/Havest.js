@@ -15,14 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'Havest'
     });
-
     Havest.associate = function(models) {
       Havest.belongsTo(models.Mill, {foreignKey: 'millId', sourceKey: 'id'});
     }
-    
     Havest.associate = function(models) {
       Havest.hasMany(models.Farm, {foreignKey: 'havestId'});
     }
-  
     return Havest;
   }

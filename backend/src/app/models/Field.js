@@ -14,10 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'Field'
     });
-  
     Field.associate = function(models) {
       Field.belongsTo(models.Farm, {foreignKey: 'farmId', sourceKey: 'id'});
     }
-  
     return Field;
   }

@@ -1,96 +1,109 @@
-const { Mill ,Havest, Farm, Field } = require('../models');
+const { Mill, Havest, Farm, Field } = require('../models');
 
 module.exports = {
 
     async index(req, res){
-        console.log('[CONTROLLER] havest (index)');
-
-        const result = await Havest.findAll({
-            include: {
-                model: Farm,
+        console.log('[CONTROLLER] Havest (index) REQUEST');
+        try {
+            const result = await Havest.findAll({
+                where: req.query,
                 include: {
-                    model: Field
+                    model: Farm,
+                    include: {
+                        model: Field
+                    }
                 }
-            }
-        });
-
-        return res.json(result);
+            });
+            return res.status(200).json(result);
+        } catch (error) {
+            console.log('[CONTROLLER] Havest (index) ERROR', error);
+            return res.status(500).json({"error": "Havest unexpected error found (index)."}) 
+        }
     },
 
     async show(req, res){
-        console.log('[CONTROLLER] havest (show)');
-
-        const result = await Havest.findByPk(req.params.id, {
-            include: {
-                model: Farm,
+        console.log('[CONTROLLER] Havest (show) REQUEST');
+        try {
+            const result = await Havest.findByPk(req.params.id, {
                 include: {
-                    model: Field
+                    model: Farm,
+                    include: {
+                        model: Field
+                    }
                 }
+            });
+            if (!result){
+                return res.status(400).json({"warning": "Havest was not found."});
+            }else{
+                return res.status(200).json(result);
             }
-        });
-
-        if (!result){
-            return res.json({"warning": "Havest was not found."});
+        } catch (error) {
+            console.log('[CONTROLLER] Havest (show) ERROR', error);
+            return res.status(500).json({"error": "Havest unexpected error found (show)."}); 
         }
-
-        return res.json(result);
     },
 
     async store(req, res){
-        console.log('[CONTROLLER] havest (store)');
-
-        const { millId } = req.body;
-
-        const millCount = await Mill.count({
-            where: {id: millId}
-        });
-
-        if (millCount == 0){
-            res.json({"warning": "Mill ID dos not exixts."});
+        console.log('[CONTROLLER] Havest (store) REQUEST');
+        try {
+            const { millId } = req.body;
+            const millCount = await Mill.count({where: {id: millId}});
+            if (millCount == 0){
+                res.status(400).json({"warning": "Mill ID does not exists."});
+            }else{
+                const result = await Havest.create(req.body);
+                return res.status(200).json(result);
+            }
+        } catch (error) {
+            console.log('[CONTROLLER] Havest (store) ERROR', error);
+            return res.status(500).json({"error": "Havest unexpected error found (update)."}); 
         }
-
-        const result = await Havest.create(req.body);
-   
-        return res.json(result);
     },
 
     async update(req, res){
-        console.log('[CONTROLLER] havest (update)');
-
-        const { millId } = req.body;
-
-        const millCount = await Mill.count({
-            where: {id: millId}
-        });
-
-        if (millCount == 0){
-            res.json({"warning": "Mill ID dos not exixts."});
-        }
-
-        const havest = await Havest.findByPk(req.params.id);
-
-        if (!havest){
-            return res.json({"warning": "Havest was not found."});
-        }
-
-        const result = await havest.update(req.body);
-
-        return res.json(result);
+        console.log('[CONTROLLER] Havest (update) REQUEST');
+        try {
+            const { millId } = req.body;
+            const millCount = await Mill.count({where: {id: millId}});
+            if (millCount == 0){
+                res.status(400).json({"warning": "Mill ID does not exists."});
+            }else {
+                const havest = await Havest.findByPk(req.params.id);
+                if (!havest){
+                    return res.status(400).json({"warning": "Havest was not found."});
+                }else{
+                    const result = await havest.update(req.body);
+                    return res.status(200).json(result);
+                }
+            }
+        } catch (error) {
+            console.log('[CONTROLLER] Havest (update) ERROR');
+            return res.status(500).json({"error": "Havest unexpected error found (update)."}); 
+        }  
     },
 
     async destroy(req, res){
-        console.log('[CONTROLLER] havest (destroy)');
-
-        const { millId } = await Havest.findByPk(req.params.id);
-
-        if (!havest){
-            return res.json({"warning": "Havest was not found."});
-        }
-
-        await havest.destroy({
-            where: {id: req.params.id}
-        });
-        
-        return res.json({"sucess": "Havest was removed."});
+        console.log('[CONTROLLER] Havest (destroy) REQUEST');
+        try {
+            const havest = await Havest.findByPk(req.params.id, {
+                include: {
+                    model: Farm,
+                    include: {
+                        model: Field
+                    }
+                }
+            });
+            if (!havest){
+                return res.status(400).json({"warning": "Havest was not found."});
+            }else if (havest && havest.Farms.length > 0){
+                return res.status(400).json({"warning": "Havest has relation with Farms (destroy)."});
+            }else {
+                await havest.destroy({here: {id: req.params.id}});
+                return res.status(200).json({"sucess": "Havest was removed."});
+            }
+        } catch (error) {
+            console.log('[CONTROLLER] Havest (destroy) ERROR');
+            return res.status(500).json({"error": "Havest unexpected error found (destroy)."}); 
+        }   
     }
 }

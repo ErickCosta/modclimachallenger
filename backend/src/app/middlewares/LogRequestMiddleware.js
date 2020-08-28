@@ -2,14 +2,10 @@ module.exports = {
 
     async log(req, res, next){
         const { method, url } = req;
-    
-        const logLabel = `[${method.toUpperCase()}] ${url}`
-            
+        const logLabel = `[${method.toUpperCase()}] ${url}`       
         console.log(logLabel);
-    
         return next();
-    }
-    
+    }  
 }
 
 

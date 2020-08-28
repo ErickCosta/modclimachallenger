@@ -6,10 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       tableName: 'Mill'
     });
-  
     Mill.associate = function(models) {
       Mill.hasMany(models.Havest, {foreignKey: 'millId'});
     }
-
     return Mill;
   }

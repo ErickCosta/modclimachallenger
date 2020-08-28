@@ -1,8 +1,6 @@
 const express = require('express');
 const routes = express.Router();
-
 const fieldDataValidationMiddleware = require('../middlewares/FieldDataValidationMiddleware');
-
 const fieldController = require('../controllers/FieldController');
 
 routes.get('/field', fieldDataValidationMiddleware.index, fieldController.index);
