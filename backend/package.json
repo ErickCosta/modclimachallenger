@@ -1,10 +1,11 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon ./src/",
+    "prod": "node ./src/"
   },
   "dependencies": {
     "dotenv": "^8.2.0",
