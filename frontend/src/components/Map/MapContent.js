@@ -5,7 +5,7 @@ import localeIcon from '../../assets/locale.png';
 
 export default function MapContent() {
 
-    const API_KEY = 'AIzaSyDxOaU5S69TrK6uGW7s9fnPx26F0R0pgCc';
+    const API_KEY = '';
 
     const AnyReactComponent = ({ text }) => <div>{text}</div>
 
