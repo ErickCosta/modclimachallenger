@@ -6,5 +6,3 @@ socketio.on("changed", function(msg) {
     console.log('message:', msg);
 });
 console.log('Arquivo de conexão!!!');
-
-

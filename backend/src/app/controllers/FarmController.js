@@ -47,7 +47,7 @@ module.exports = {
                 return res.status(400).json({"warning": "Havest ID does not exixts."});
             }else{
                 const result = await Farm.create(req.body);
-                socketIo.update('{message: "New farm created"}');
+                socketIo.update('{message: "New Farm created"}');
                 return res.status(200).json(result);
             }
         } catch (error) {
